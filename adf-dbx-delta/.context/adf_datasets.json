@@ -1,0 +1,86 @@
+[
+  {
+    "etag": "84009da3-0000-0100-0000-68ae761f0000",
+    "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.DataFactory/factories/adf-taxi-sono-global/datasets/ds_adls_raw",
+    "name": "ds_adls_raw",
+    "properties": {
+      "additionalProperties": null,
+      "annotations": [],
+      "columnDelimiter": ",",
+      "compressionCodec": null,
+      "compressionLevel": null,
+      "description": null,
+      "encodingName": null,
+      "escapeChar": "\\",
+      "firstRowAsHeader": true,
+      "folder": null,
+      "linkedServiceName": {
+        "parameters": null,
+        "referenceName": "ls_adls",
+        "type": "LinkedServiceReference"
+      },
+      "location": {
+        "additionalProperties": null,
+        "fileName": {
+          "type": "Expression",
+          "value": "@dataset().file_name\n"
+        },
+        "fileSystem": "taxi",
+        "folderPath": "raw",
+        "type": "AzureBlobFSLocation"
+      },
+      "nullValue": null,
+      "parameters": {
+        "file_name": {
+          "defaultValue": null,
+          "type": "string"
+        }
+      },
+      "quoteChar": "\"",
+      "rowDelimiter": null,
+      "schema": [],
+      "structure": null,
+      "type": "DelimitedText"
+    },
+    "resourceGroup": "rg-adf-dbx-demo",
+    "type": "Microsoft.DataFactory/factories/datasets"
+  },
+  {
+    "etag": "8400b7a3-0000-0100-0000-68ae761f0000",
+    "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.DataFactory/factories/adf-taxi-sono-global/datasets/ds_http_taxis",
+    "name": "ds_http_taxis",
+    "properties": {
+      "additionalProperties": null,
+      "annotations": [],
+      "columnDelimiter": ",",
+      "compressionCodec": null,
+      "compressionLevel": null,
+      "description": null,
+      "encodingName": null,
+      "escapeChar": "\\",
+      "firstRowAsHeader": true,
+      "folder": null,
+      "linkedServiceName": {
+        "parameters": null,
+        "referenceName": "ls_http",
+        "type": "LinkedServiceReference"
+      },
+      "location": {
+        "additionalProperties": null,
+        "fileName": null,
+        "folderPath": null,
+        "relativeUrl": "/mwaskom/seaborn-data/master/taxis.csv",
+        "type": "HttpServerLocation"
+      },
+      "nullValue": null,
+      "parameters": null,
+      "quoteChar": "\"",
+      "rowDelimiter": null,
+      "schema": [],
+      "structure": null,
+      "type": "DelimitedText"
+    },
+    "resourceGroup": "rg-adf-dbx-demo",
+    "type": "Microsoft.DataFactory/factories/datasets"
+  }
+]

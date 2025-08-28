@@ -1,0 +1,47 @@
+{
+  "count": 5,
+  "data": [
+    {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Databricks/workspaces/dbx-taxi",
+      "location": "eastus",
+      "name": "dbx-taxi",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": {},
+      "type": "microsoft.databricks/workspaces"
+    },
+    {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.DataFactory/factories/adf-taxi-sono-global",
+      "location": "eastus",
+      "name": "adf-taxi-sono-global",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": {},
+      "type": "microsoft.datafactory/factories"
+    },
+    {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/microsoft.insights/actiongroups/email",
+      "location": "global",
+      "name": "email",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": null,
+      "type": "microsoft.insights/actiongroups"
+    },
+    {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Purview/accounts/pvw-taxi",
+      "location": "eastus",
+      "name": "pvw-taxi",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": {},
+      "type": "microsoft.purview/accounts"
+    },
+    {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Storage/storageAccounts/sttaxistorage",
+      "location": "eastus",
+      "name": "sttaxistorage",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": {},
+      "type": "microsoft.storage/storageaccounts"
+    }
+  ],
+  "skip_token": null,
+  "total_records": 5
+}

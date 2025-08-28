@@ -1,0 +1,171 @@
+{
+  "clusters": [
+    {
+      "cluster_id": "0827-030645-qsohgof6",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "driver_healthy": false,
+      "cluster_name": "job-1038171955501662-run-1018811513406477",
+      "spark_version": "16.4.x-scala2.12",
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "autotermination_minutes": 0,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "JOB",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "effective_spark_version": "16.4.x-scala2.12",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "Encountered Quota Exhaustion issue in your account:  databricks_error_message: The VM size you are specifying is not available. [details] QuotaExceeded: Operation could not be completed as it resul...",
+      "start_time": 1756264005603,
+      "terminated_time": 1756264526103,
+      "last_state_loss_time": 0,
+      "last_activity_time": 0,
+      "last_restarted_time": 1756264005603,
+      "num_workers": 1,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "job-1038171955501662-run-1018811513406477",
+        "ClusterId": "0827-030645-qsohgof6",
+        "JobId": "1038171955501662",
+        "RunName": "ADF_adf-taxi-sono-global_pl_ingest_transform_RunBronzeSilver_4d12b037-4be0-4b74-a403-ba7146d49ac3"
+      },
+      "termination_reason": {
+        "code": "AZURE_QUOTA_EXCEEDED_EXCEPTION",
+        "type": "CLIENT_ERROR",
+        "parameters": {
+          "databricks_error_message": "The VM size you are specifying is not available. [details] QuotaExceeded: Operation could not be completed as it results in exceeding approved Total Regional Cores quota. Additional details - Deployment Model: Resource Manager, Location: eastus, Current Limit: 4, Current Usage: 4, Additional Required: 2, (Minimum) New Limit Required: 6. Setup Alerts when Quota reaches threshold. Learn more at https://aka.ms/quotamonitoringalerting . Submit a request for Quota increase at https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22:[%7B%22location%22:%22eastus%22,%22providerId%22:%22Microsoft.Compute%22,%22resourceName%22:%22cores%22,%22quotaRequest%22:%7B%22properties%22:%7B%22limit%22:6,%22unit%22:%22Count%22,%22name%22:%7B%22value%22:%22cores%22%7D%7D%7D%7D]%7D by specifying parameters listed in the \u2018Details\u2019 section for deployment to succeed. Please read more about quota limits at https://docs.microsoft.com/en-us/azure/azure-supportability/regional-quota-requests(OnDemand)",
+          "instance_id": "failed-3b3f0568-c586-402c-a",
+          "azure_error_code": "QuotaExceeded",
+          "azure_error_message": "Operation could not be completed as it results in exceeding approved Total Regional Cores quota. Additional details - Deployment Model: Resource Manager, Location: eastus, Current Limit: 4, Current Usage: 4, Additional Required: 2, (Minimum) New Limit Required: 6. Setup Alerts when Quota reaches threshold. Learn more at https://aka.ms/quotamonitoringalerting . Submit a request for Quota increase at https://aka.ms/ProdportalCRP/#blade/Microsoft_Azure_Capacity/UsageAndQuota.ReactView/Parameters/%7B%22subscriptionId%22:%22cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380%22,%22command%22:%22openQuotaApprovalBlade%22,%22quotas%22:[%7B%22location%22:%22eastus%22,%22providerId%22:%22Microsoft.Compute%22,%22resourceName%22:%22cores%22,%22quotaRequest%22:%7B%22properties%22:%7B%22limit%22:6,%22unit%22:%22Count%22,%22name%22:%7B%22value%22:%22cores%22%7D%7D%7D%7D]%7D by specifying parameters listed in the \u2018Details\u2019 section for deployment to succeed. Please read more about quota limits at https://docs.microsoft.com/en-us/azure/azure-supportability/regional-quota-requests(OnDemand)"
+        }
+      },
+      "init_scripts_safe_mode": false
+    },
+    {
+      "cluster_id": "0827-032928-8ihtjeea",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "spark_context_id": 8237354391643623741,
+      "driver_healthy": true,
+      "cluster_name": "job-512391351395166-run-306135496767558",
+      "spark_version": "16.4.x-scala2.12",
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "autotermination_minutes": 0,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "JOB",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "effective_spark_version": "16.4.x-scala2.12",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "",
+      "start_time": 1756265368744,
+      "terminated_time": 1756266544339,
+      "last_state_loss_time": 0,
+      "last_activity_time": 1756266428477,
+      "last_restarted_time": 1756266418101,
+      "num_workers": 1,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "job-512391351395166-run-306135496767558",
+        "ClusterId": "0827-032928-8ihtjeea",
+        "JobId": "512391351395166",
+        "RunName": "ADF_adf-taxi-sono-global_pl_ingest_transform_RunBronzeSilver_a10fc63d-4e3c-488d-bbf8-aa5deddcf95d"
+      },
+      "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+      },
+      "init_scripts_safe_mode": false
+    },
+    {
+      "cluster_id": "0826-235901-rqv5jag2",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "spark_context_id": 6680257405667450121,
+      "driver_healthy": true,
+      "cluster_name": "single-small",
+      "spark_version": "16.4.x-scala2.12",
+      "spark_conf": {
+        "spark.master": "local[*, 4]",
+        "spark.databricks.cluster.profile": "singleNode"
+      },
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "custom_tags": {
+        "ResourceClass": "SingleNode"
+      },
+      "autotermination_minutes": 30,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "UI",
+      "single_user_name": "sportsgroup3d@gmail.com",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "data_security_mode": "LEGACY_SINGLE_USER_STANDARD",
+      "runtime_engine": "PHOTON",
+      "effective_spark_version": "16.4.x-cpu-ml-photon-scala2.12",
+      "kind": "CLASSIC_PREVIEW",
+      "use_ml_runtime": true,
+      "is_single_node": true,
+      "assigned_principal": "user:sportsgroup3d@gmail.com",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "Inactive cluster terminated (inactive for 30 minutes).",
+      "start_time": 1756252741347,
+      "terminated_time": 1756393012647,
+      "last_state_loss_time": 1756390912705,
+      "last_activity_time": 1756390919254,
+      "last_restarted_time": 1756390912782,
+      "num_workers": 0,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "single-small",
+        "ClusterId": "0826-235901-rqv5jag2"
+      },
+      "termination_reason": {
+        "code": "INACTIVITY",
+        "type": "SUCCESS",
+        "parameters": {
+          "inactivity_duration_min": "30"
+        }
+      },
+      "init_scripts_safe_mode": false
+    }
+  ]
+}

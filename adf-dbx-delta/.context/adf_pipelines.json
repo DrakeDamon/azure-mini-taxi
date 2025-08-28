@@ -1,0 +1,178 @@
+[
+  {
+    "activities": [
+      {
+        "additionalProperties": null,
+        "dataIntegrationUnits": null,
+        "dependsOn": [],
+        "description": null,
+        "enableSkipIncompatibleRow": null,
+        "enableStaging": false,
+        "inputs": [
+          {
+            "parameters": {},
+            "referenceName": "ds_http_taxis",
+            "type": "DatasetReference"
+          }
+        ],
+        "linkedServiceName": null,
+        "logSettings": null,
+        "logStorageSettings": null,
+        "name": "CopyHttpToAdls",
+        "onInactiveMarkAs": null,
+        "outputs": [
+          {
+            "parameters": {
+              "file_name": {
+                "type": "Expression",
+                "value": "@concat('taxis_', pipeline().parameters.date_str, '.csv')\n"
+              }
+            },
+            "referenceName": "ds_adls_raw",
+            "type": "DatasetReference"
+          }
+        ],
+        "parallelCopies": null,
+        "policy": {
+          "additionalProperties": null,
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false,
+          "timeout": "0.12:00:00"
+        },
+        "preserve": null,
+        "preserveRules": null,
+        "redirectIncompatibleRowSettings": null,
+        "sink": {
+          "additionalProperties": null,
+          "disableMetricsCollection": null,
+          "formatSettings": {
+            "additionalProperties": null,
+            "fileExtension": ".txt",
+            "fileNamePrefix": null,
+            "maxRowsPerFile": null,
+            "quoteAllText": true,
+            "type": "DelimitedTextWriteSettings"
+          },
+          "maxConcurrentConnections": null,
+          "sinkRetryCount": null,
+          "sinkRetryWait": null,
+          "storeSettings": {
+            "additionalProperties": null,
+            "blockSizeInMb": null,
+            "copyBehavior": null,
+            "disableMetricsCollection": null,
+            "maxConcurrentConnections": null,
+            "metadata": null,
+            "type": "AzureBlobFSWriteSettings"
+          },
+          "type": "DelimitedTextSink",
+          "writeBatchSize": null,
+          "writeBatchTimeout": null
+        },
+        "skipErrorFile": null,
+        "source": {
+          "additionalColumns": null,
+          "additionalProperties": null,
+          "disableMetricsCollection": null,
+          "formatSettings": {
+            "additionalProperties": null,
+            "compressionProperties": null,
+            "skipLineCount": null,
+            "type": "DelimitedTextReadSettings"
+          },
+          "maxConcurrentConnections": null,
+          "sourceRetryCount": null,
+          "sourceRetryWait": null,
+          "storeSettings": {
+            "additionalColumns": null,
+            "additionalHeaders": null,
+            "additionalProperties": null,
+            "disableMetricsCollection": null,
+            "maxConcurrentConnections": null,
+            "requestBody": null,
+            "requestMethod": "GET",
+            "requestTimeout": null,
+            "type": "HttpReadSettings"
+          },
+          "type": "DelimitedTextSource"
+        },
+        "stagingSettings": null,
+        "state": null,
+        "translator": {
+          "type": "TabularTranslator",
+          "typeConversion": true,
+          "typeConversionSettings": {
+            "allowDataTruncation": true,
+            "treatBooleanAsNumber": false
+          }
+        },
+        "type": "Copy",
+        "userProperties": [],
+        "validateDataConsistency": null
+      },
+      {
+        "additionalProperties": null,
+        "baseParameters": null,
+        "dependsOn": [
+          {
+            "activity": "CopyHttpToAdls",
+            "additionalProperties": null,
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ],
+        "description": null,
+        "libraries": null,
+        "linkedServiceName": {
+          "parameters": null,
+          "referenceName": "ls_databricks",
+          "type": "LinkedServiceReference"
+        },
+        "name": "RunBronzeSilver",
+        "notebookPath": "/Shared/bronze_silver",
+        "onInactiveMarkAs": null,
+        "policy": {
+          "additionalProperties": null,
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false,
+          "timeout": "0.12:00:00"
+        },
+        "state": null,
+        "type": "DatabricksNotebook",
+        "userProperties": []
+      }
+    ],
+    "additionalProperties": null,
+    "annotations": [],
+    "concurrency": null,
+    "description": null,
+    "etag": "a6000da6-0000-0100-0000-68b076ec0000",
+    "folder": null,
+    "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.DataFactory/factories/adf-taxi-sono-global/pipelines/pl_ingest_transform",
+    "name": "pl_ingest_transform",
+    "parameters": {
+      "date_str": {
+        "defaultValue": "@{formatDateTime(utcnow(),'yyyyMMdd')}",
+        "type": "string"
+      },
+      "source_url": {
+        "defaultValue": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/taxis.csv",
+        "type": "string"
+      }
+    },
+    "policy": {
+      "elapsedTimeMetric": {
+        "duration": null
+      }
+    },
+    "resourceGroup": "rg-adf-dbx-demo",
+    "runDimensions": null,
+    "type": "Microsoft.DataFactory/factories/pipelines",
+    "variables": null
+  }
+]
