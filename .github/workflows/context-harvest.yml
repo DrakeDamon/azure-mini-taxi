@@ -2,6 +2,8 @@ name: context-harvest
 on:
   schedule: [{ cron: "23 3 * * *" }]
   workflow_dispatch: {}
+permissions:
+  contents: write
 jobs:
   harvest:
     runs-on: ubuntu-latest
@@ -59,4 +61,3 @@ jobs:
           git add adf-dbx-delta/.context || true
           git diff --cached --quiet || git commit -m "context: refresh snapshots"
           git push
-
