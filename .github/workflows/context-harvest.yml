@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify scripts present
+        run: |
+          test -f scripts/ctx_azure.sh || { echo "scripts/ctx_azure.sh missing"; exit 1; }
+          test -f scripts/ctx_databricks.sh || { echo "scripts/ctx_databricks.sh missing"; exit 1; }
+
       - uses: actions/setup-python@v5
         with: { python-version: '3.11' }
 
