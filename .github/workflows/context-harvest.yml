@@ -1,5 +1,9 @@
 name: context-harvest
 on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'adf-dbx-delta/.context/**'
   schedule: [{ cron: "23 3 * * *" }]
   workflow_dispatch: {}
 permissions:
