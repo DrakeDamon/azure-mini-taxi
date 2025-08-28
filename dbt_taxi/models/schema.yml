@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: silver_taxis
+    columns:
+      - name: pickup_ts
+        tests: [not_null]
+      - name: trip_distance
+        tests: [not_null]
+      - name: fare_amount
+        tests: [not_null]
+      - name: payment_type
+        tests:
+          - accepted_values:
+              values: ['Cash','Credit','Other']
+
+  - name: fct_taxi_daily
+    columns:
+      - name: pickup_date
+        tests: [not_null, unique]
+
