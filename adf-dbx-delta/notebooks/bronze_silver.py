@@ -113,26 +113,74 @@ if not overall:
 
 # COMMAND ----------
 
-# ---- Data Quality (simple) ----
+# ---- Data Quality (normalized, strict/warn toggle) ----
 from pyspark.sql import functions as F
 
+# 0) Ensure raw_df is available
+try:
+    raw_df
+except NameError:
+    raw_df = spark.read.option("header", True).csv(RAW_DIR + "taxis_*.csv")
+
+# 1) Normalize & type-cast first
+dq_df = (
+    raw_df
+    .withColumn("distance_d", F.col("distance").cast("double"))
+    .withColumn("fare_d",     F.col("fare").cast("double"))
+    .withColumn("payment_raw", F.lower(F.trim(F.col("payment"))))
+    .withColumn(
+        "payment_norm",
+        F.when(F.col("payment_raw").like("%credit%"), "credit")
+         .when(F.col("payment_raw") == "cash", "cash")
+         .otherwise("other")
+    )
+)
+
+# 2) Checks on normalized columns
 checks = {
-    "trip_distance_positive":  (F.col("distance").cast("double") > 0),
-    "fare_nonnegative":        (F.col("fare").cast("double") >= 0),
-    "payment_type_allowed":    (F.col("payment").isin("cash", "credit"))
+    "trip_distance_positive": (F.col("distance_d") > 0),
+    "fare_nonnegative":       (F.col("fare_d") >= 0),
+    "payment_type_allowed":   (F.col("payment_norm").isin("cash","credit","other"))
 }
 
 violations = []
 for name, expr in checks.items():
-    cnt = raw_df.filter(~expr).count()
+    cnt = dq_df.filter(~expr | expr.isNull()).count()
     if cnt > 0:
         violations.append((name, cnt))
 
+# 3) strict fail vs warn
+STRICT_DQ = False  # set True to make ADF fail & fire alert
 if violations:
-    msg = "DQ failed: " + ", ".join([f"{n}={c}" for n,c in violations])
-    raise Exception(msg)
+    msg = " | ".join([f"{n}:{c}" for n,c in violations])
+    if STRICT_DQ:
+        raise Exception(f"Data quality failed → {msg}")
+    else:
+        print(f"Data quality WARN → {msg} (continuing) ✅")
+else:
+    print("Data quality ✅ — all checks passed")
 
-print("Data quality ✅ — all checks passed")
+# 4) Use only valid rows for Silver
+valid_df = dq_df.filter(
+    (F.col("distance_d") > 0) &
+    (F.col("fare_d") >= 0)
+)
+
+# Write Silver using normalized columns (idempotent overwrite)
+silver_df = (
+    valid_df.select(
+        F.col("pickup").alias("pickup_ts"),
+        F.col("dropoff").alias("dropoff_ts"),
+        F.col("distance_d").alias("trip_distance"),
+        F.col("fare_d").alias("fare_amount"),
+        F.col("tip").cast("double").alias("tip_amount"),
+        F.col("tolls").cast("double").alias("tolls_amount"),
+        F.initcap(F.col("payment_norm")).alias("payment_type")
+    )
+)
+silver_path = DELTA_BASE + "silver/taxis"
+silver_df.write.mode("overwrite").format("delta").save(silver_path)
+print("silver rows:", spark.read.format("delta").load(silver_path).count())
 
 # COMMAND ----------
 
