@@ -153,4 +153,4 @@ LOCATION 'abfss://taxi@sttaxistorage.dfs.core.windows.net/delta/silver/taxis'
 
 print("Hive metastore tables created successfully")
 
-# Test comment to trigger GitHub Actions workflow
+# Updated: trigger deploy workflow test
