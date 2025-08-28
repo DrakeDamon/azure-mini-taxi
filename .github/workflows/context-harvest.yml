@@ -65,11 +65,18 @@ jobs:
             echo "No changes to commit"; exit 0
           fi
           git commit -m "context: refresh snapshots" || true
-          echo "Attempting direct push to main with GITHUB_TOKEN"
-          if git push origin HEAD:main; then
-            echo "Pushed directly to main"; exit 0
+          echo "Rebasing on latest main before push"
+          git fetch --no-tags origin main || true
+          if ! git rebase origin/main; then
+            echo "Rebase failed or not possible; will fallback to PR";
+            git rebase --abort || true
+          else
+            echo "Attempting push to main after rebase"
+            if git push origin HEAD:main; then
+              echo "Pushed directly to main"; exit 0
+            fi
           fi
-          echo "Direct push failed; trying push via GH_PUSH_TOKEN to branch context/snapshots"
+          echo "Direct push blocked; trying push via GH_PUSH_TOKEN to branch context/snapshots"
           BRANCH="context/snapshots"
           git fetch origin || true
           git checkout -B "$BRANCH"
