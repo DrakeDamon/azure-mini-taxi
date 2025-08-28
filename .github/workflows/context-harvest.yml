@@ -4,6 +4,7 @@ on:
   workflow_dispatch: {}
 permissions:
   contents: write
+  pull-requests: write
 jobs:
   harvest:
     runs-on: ubuntu-latest
@@ -56,8 +57,34 @@ jobs:
 
       - name: Commit snapshots
         run: |
+          set -e
           git config user.name  "context-bot"
           git config user.email "context-bot@users.noreply.github.com"
           git add adf-dbx-delta/.context || true
-          git diff --cached --quiet || git commit -m "context: refresh snapshots"
-          git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"; exit 0
+          fi
+          git commit -m "context: refresh snapshots" || true
+          echo "Attempting direct push to main with GITHUB_TOKEN"
+          if git push origin HEAD:main; then
+            echo "Pushed directly to main"; exit 0
+          fi
+          echo "Direct push failed; trying push via GH_PUSH_TOKEN to branch context/snapshots"
+          BRANCH="context/snapshots"
+          git fetch origin || true
+          git checkout -B "$BRANCH"
+          if [ -n "${{ secrets.GH_PUSH_TOKEN }}" ]; then
+            git remote set-url origin "https://x-access-token:${{ secrets.GH_PUSH_TOKEN }}@github.com/${{ github.repository }}.git"
+          fi
+          git push --set-upstream origin "$BRANCH"
+
+      - name: Open PR for snapshots (fallback)
+        if: always()
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GH_PUSH_TOKEN != '' && secrets.GH_PUSH_TOKEN || github.token }}
+          branch: context/snapshots
+          title: "context: refresh snapshots"
+          commit-message: "context: refresh snapshots"
+          body: |
+            Automated context snapshots. If this PR is open, direct push to main is restricted (branch protection or read-only token). Merge to update adf-dbx-delta/.context.
