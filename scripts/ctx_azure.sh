@@ -26,10 +26,10 @@ echo "== Storage account (endpoints & props) =="
 az storage account show -g "$RESOURCE_GROUP" -n "$STORAGE_ACCOUNT" -o json > "$OUT/storage_account.json"
 
 echo "== ADF: linked services, datasets, pipelines, triggers =="
-az datafactory linked-service list -g "$RESOURCE_GROUP" -n "$ADF_FACTORY" -o json > "$OUT/adf_linked_services.json"
-az datafactory dataset list         -g "$RESOURCE_GROUP" -n "$ADF_FACTORY" -o json > "$OUT/adf_datasets.json"
-az datafactory pipeline list        -g "$RESOURCE_GROUP" -n "$ADF_FACTORY" -o json > "$OUT/adf_pipelines.json"
-az datafactory trigger list         -g "$RESOURCE_GROUP" -n "$ADF_FACTORY" -o json > "$OUT/adf_triggers.json"
+az datafactory linked-service list -g "$RESOURCE_GROUP" --factory-name "$ADF_FACTORY" -o json > "$OUT/adf_linked_services.json"
+az datafactory dataset list         -g "$RESOURCE_GROUP" --factory-name "$ADF_FACTORY" -o json > "$OUT/adf_datasets.json"
+az datafactory pipeline list        -g "$RESOURCE_GROUP" --factory-name "$ADF_FACTORY" -o json > "$OUT/adf_pipelines.json"
+az datafactory trigger list         -g "$RESOURCE_GROUP" --factory-name "$ADF_FACTORY" -o json > "$OUT/adf_triggers.json"
 
 echo "== ADF: pipeline runs (last 24h) =="
 # portable 24h window
@@ -44,9 +44,8 @@ fi
 UNTIL=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 az datafactory pipeline-run query-by-factory \
-  -g "$RESOURCE_GROUP" -n "$ADF_FACTORY" \
+  -g "$RESOURCE_GROUP" --factory-name "$ADF_FACTORY" \
   --last-updated-after "$SINCE" --last-updated-before "$UNTIL" -o json \
   > "$OUT/adf_runs_24h.json" || echo "[]">"$OUT/adf_runs_24h.json"
 
 echo "Wrote Azure context to $OUT"
-

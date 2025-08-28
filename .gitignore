@@ -1,5 +1,7 @@
+# local env & artifacts
+.env
+# dbt local state
 dbt_taxi/target/
 dbt_taxi/logs/
 dbt_taxi/.user.yml
 dbt_taxi/profiles.yml
-.env
