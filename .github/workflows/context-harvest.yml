@@ -59,7 +59,7 @@ jobs:
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: bash scripts/ctx_databricks.sh
 
-      - name: Commit snapshots
+      - name: Commit snapshots (PR-only)
         run: |
           set -e
           git config user.name  "context-bot"
@@ -69,27 +69,15 @@ jobs:
             echo "No changes to commit"; exit 0
           fi
           git commit -m "context: refresh snapshots" || true
-          echo "Rebasing on latest main before push"
-          git fetch --no-tags origin main || true
-          if ! git rebase origin/main; then
-            echo "Rebase failed or not possible; will fallback to PR";
-            git rebase --abort || true
-          else
-            echo "Attempting push to main after rebase"
-            if git push origin HEAD:main; then
-              echo "Pushed directly to main"; exit 0
-            fi
-          fi
-          echo "Direct push blocked; trying push via GH_PUSH_TOKEN to branch context/snapshots"
           BRANCH="context/snapshots"
           git fetch origin || true
           git checkout -B "$BRANCH"
           if [ -n "${{ secrets.GH_PUSH_TOKEN }}" ]; then
             git remote set-url origin "https://x-access-token:${{ secrets.GH_PUSH_TOKEN }}@github.com/${{ github.repository }}.git"
           fi
-          git push --set-upstream origin "$BRANCH"
+          git push --set-upstream origin "$BRANCH" --force-with-lease
 
-      - name: Open PR for snapshots (fallback)
+      - name: Open PR for snapshots
         if: always()
         uses: peter-evans/create-pull-request@v5
         with:
