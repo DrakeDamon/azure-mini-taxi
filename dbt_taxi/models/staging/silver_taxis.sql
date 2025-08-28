@@ -1,0 +1,1 @@
+select * from hive_metastore.default.silver_taxis

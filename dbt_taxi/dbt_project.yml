@@ -1,0 +1,10 @@
+name: "dbt_taxi"
+version: "1.0"
+profile: "databricks"
+models:
+  dbt_taxi:
+    +materialized: table
+    staging:
+      +schema: default
+    marts:
+      +schema: default
