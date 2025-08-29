@@ -46,7 +46,6 @@ Parameters (ADF defaults)
 - images/adls_raw_file.png
 - images/dbx_bronze_silver_gold_counts.png
 - images/gha_deploy_success.png
-- images/alert_rule.png
 - images/alert_email.png
 - images/dbt_fct_taxi_daily_query.png
 
