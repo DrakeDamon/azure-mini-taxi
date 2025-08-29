@@ -46,32 +46,28 @@ def _list_names(path: str):
         return []
 
 # ---- RAW cleanup + read (no glob) ----
-# Remove any junk names that can break ABFS URI parsing
+# Clean up any junk names once, then read only clean CSVs
 bad = [f.path for f in dbutils.fs.ls(RAW_DIR) if (':bad' in f.name) or ('@{' in f.name)]
-for p in bad:
-    try:
-        print("Deleting:", p)
-        dbutils.fs.rm(p, True)
-    except Exception:
-        pass
+for p in bad: dbutils.fs.rm(p, True)
 
-# Read only clean CSVs (don’t glob)
 all_files = dbutils.fs.ls(RAW_DIR)
 good_paths = [f.path for f in all_files
               if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
 
+if not good_paths:
+    raise Exception(f"No CSVs in {RAW_DIR}. Run ADF pipeline pl_ingest_transform to land one.")
+
 raw_files = [p.split('/')[-1] for p in good_paths]
-raw_ok = len(good_paths) > 0
+raw_ok = True
 
 raw_rows, raw_err = None, None
-if raw_ok:
-    try:
-        raw_df = spark.read.option("header", True).csv(good_paths)
-        raw_rows = raw_df.count()
-        raw_ok = raw_rows > 0
-    except Exception as e:
-        raw_err = str(e)[:300]
-        raw_ok = False
+try:
+    raw_df = spark.read.option("header", True).csv(good_paths)
+    raw_rows = raw_df.count()
+    raw_ok = raw_rows > 0
+except Exception as e:
+    raw_err = str(e)[:300]
+    raw_ok = False
 
 # ---- BRONZE ----
 bronze_rows, bronze_ok, bronze_err = None, False, None
@@ -82,6 +78,8 @@ try:
             all_files = dbutils.fs.ls(RAW_DIR)
             good_paths = [f.path for f in all_files
                           if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+            if not good_paths:
+                raise Exception(f"No CSVs in {RAW_DIR}. Run ADF pipeline pl_ingest_transform to land one.")
             raw_df = spark.read.option("header", True).csv(good_paths)
             raw_rows = raw_df.count()
         (raw_df.write.mode("overwrite").format("delta").save(bronze_path))
@@ -98,6 +96,8 @@ try:
         all_files = dbutils.fs.ls(RAW_DIR)
         good_paths = [f.path for f in all_files
                       if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+        if not good_paths:
+            raise Exception(f"No CSVs in {RAW_DIR}. Run ADF pipeline pl_ingest_transform to land one.")
         raw_df = spark.read.option("header", True).csv(good_paths)
         raw_rows = raw_df.count()
     silver_df = (
@@ -144,7 +144,7 @@ except NameError:
     good_paths = [f.path for f in all_files
                   if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
     if not good_paths:
-        raise Exception(f"No clean CSVs found in {RAW_DIR}. Found: {[f.name for f in all_files]}")
+        raise Exception(f"No CSVs in {RAW_DIR}. Run ADF pipeline pl_ingest_transform to land one.")
     raw_df = spark.read.option("header", True).csv(good_paths)
 
 # 1) Normalize & type-cast first
