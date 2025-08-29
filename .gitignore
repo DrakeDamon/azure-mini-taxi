@@ -7,3 +7,4 @@ dbt_taxi/.user.yml
 dbt_taxi/profiles.yml
 # avoid committing Databricks ipynb snapshots inside deployment folder
 adf-dbx-delta/notebooks/*.ipynb
+.venv/
