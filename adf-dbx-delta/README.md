@@ -6,14 +6,13 @@ End‑to‑end Azure data pipeline: Azure Data Factory ingests a taxi CSV over H
 Diagram source: `design/diagram.mmd`
 
 ```mermaid
-%% Diagram mirrors design/diagram.mmd
 flowchart LR
   A[HTTP taxis.csv] -->|ADF Copy| B[(ADLS Gen2: taxi/raw)]
   B -->|Databricks Notebook| C[(Delta: bronze/taxis)]
   C --> D[(Delta: silver/taxis)]
   D --> E[(Delta: gold/taxi_daily)]
   A -.-> G[ADF Trigger (daily 06:00)]
-  A -.-> H[Alert rule: Failed pipeline runs → Email]
+  A -.-> H[Alert rule: Failed pipeline runs -> Email]
   C -.-> I[dbt: fct_taxi_daily]
 ```
 
