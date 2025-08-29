@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'adf-dbx-delta/notebooks/bronze_silver.py'
+      - 'bronze_silver.ipynb'
   workflow_dispatch: {}
 
 jobs:
@@ -36,10 +36,9 @@ jobs:
       - name: Import notebook to /Shared
         run: |
           databricks workspace import \
-            --language PYTHON --format SOURCE --overwrite \
-            adf-dbx-delta/notebooks/bronze_silver.py \
+            --format JUPYTER --overwrite \
+            bronze_silver.ipynb \
             /Shared/bronze_silver
 
       - name: Verify import
         run: databricks workspace list /Shared || true
-
