@@ -1,4 +1,4 @@
-% Azure + Databricks Context
+# Azure + Databricks Context
 
 This folder contains generated context snapshots and images used in the case study and runbooks.
 
@@ -8,16 +8,12 @@ This folder contains generated context snapshots and images used in the case stu
 - Databricks: `dbx_clusters.json`, `dbx_jobs.json`, `dbx_secrets_scopes.json`, `dbx_workspace_root.json`
 
 ## Screenshots (drop here)
-Add PNG/JPG files to `./images/` and the links below will render automatically when present.
+Add PNG/JPG files to `./images/` using these names:
 
-- Linked services: `./images/linked_services.png`
-- Pipeline canvas: `./images/pipeline.png`
-- Monitor (Succeeded): `./images/monitor_success.png`
-- Monitor (Failed): `./images/monitor_failed.png`
-- Storage RAW file: `./images/storage_raw_sample.png`
-- Databricks counts: `./images/databricks_counts.png`
-- GitHub Actions success: `./images/actions_success.png`
-- dbt fct_taxi_daily query: `./images/dbt_fct_taxi_daily.png`
+- Pipeline failed (ADF): `./images/adf_pipeline_failed.png`
+- Alert rule fired (portal): `./images/alert_fired.png`
+- Alert email: `./images/alert_email.png`
+- (optional) Notebook error: `./images/dbx_notebook_error.png`
+- (optional) Pipeline succeeded (ADF): `./images/adf_pipeline_succeeded.png`
 
-> Note: These images are optional and can be updated anytime; the context snapshots are refreshed by the `context-harvest` workflow.
-
+> Note: These images are optional; the context snapshots are refreshed by the `context-harvest` workflow.
