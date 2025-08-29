@@ -45,15 +45,28 @@ def _list_names(path: str):
     except Exception:
         return []
 
-# ---- RAW checks ----
-raw_files = [n for n in _list_names(RAW_DIR) if n.startswith("taxis_") and n.endswith(".csv")]
-raw_ok = len(raw_files) > 0
+# ---- RAW cleanup + read (no glob) ----
+# Remove any junk names that can break ABFS URI parsing
+bad = [f.path for f in dbutils.fs.ls(RAW_DIR) if (':bad' in f.name) or ('@{' in f.name)]
+for p in bad:
+    try:
+        print("Deleting:", p)
+        dbutils.fs.rm(p, True)
+    except Exception:
+        pass
 
-raw_rows = None
-raw_err = None
+# Read only clean CSVs (don’t glob)
+all_files = dbutils.fs.ls(RAW_DIR)
+good_paths = [f.path for f in all_files
+              if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+
+raw_files = [p.split('/')[-1] for p in good_paths]
+raw_ok = len(good_paths) > 0
+
+raw_rows, raw_err = None, None
 if raw_ok:
     try:
-        raw_df = spark.read.option("header", True).csv(RAW_DIR + "taxis_*.csv")
+        raw_df = spark.read.option("header", True).csv(good_paths)
         raw_rows = raw_df.count()
         raw_ok = raw_rows > 0
     except Exception as e:
@@ -65,7 +78,11 @@ bronze_rows, bronze_ok, bronze_err = None, False, None
 try:
     if not _exists(bronze_path):
         if raw_rows is None:
-            raw_df = spark.read.option("header", True).csv(RAW_DIR + "taxis_*.csv")
+            # Fallback to clean read if not already loaded
+            all_files = dbutils.fs.ls(RAW_DIR)
+            good_paths = [f.path for f in all_files
+                          if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+            raw_df = spark.read.option("header", True).csv(good_paths)
             raw_rows = raw_df.count()
         (raw_df.write.mode("overwrite").format("delta").save(bronze_path))
     bronze_rows = spark.read.format("delta").load(bronze_path).count()
@@ -78,7 +95,10 @@ except Exception as e:
 silver_rows, silver_ok, silver_err = None, False, None
 try:
     if raw_rows is None:
-        raw_df = spark.read.option("header", True).csv(RAW_DIR + "taxis_*.csv")
+        all_files = dbutils.fs.ls(RAW_DIR)
+        good_paths = [f.path for f in all_files
+                      if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+        raw_df = spark.read.option("header", True).csv(good_paths)
         raw_rows = raw_df.count()
     silver_df = (
         raw_df.select(
@@ -120,7 +140,12 @@ from pyspark.sql import functions as F
 try:
     raw_df
 except NameError:
-    raw_df = spark.read.option("header", True).csv(RAW_DIR + "taxis_*.csv")
+    all_files = dbutils.fs.ls(RAW_DIR)
+    good_paths = [f.path for f in all_files
+                  if f.name.lower().startswith("taxis_") and f.name.lower().endswith(".csv")]
+    if not good_paths:
+        raise Exception(f"No clean CSVs found in {RAW_DIR}. Found: {[f.name for f in all_files]}")
+    raw_df = spark.read.option("header", True).csv(good_paths)
 
 # 1) Normalize & type-cast first
 dq_df = (
