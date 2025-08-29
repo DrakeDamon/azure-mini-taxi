@@ -1,0 +1,27 @@
+---
+title: "ADF → ADLS → Databricks (Delta)"
+subtitle: "HTTP ingest, Bronze/Silver/Gold transforms, schedule & alerts"
+slug: "adf-dbx-delta"
+stack: ["Azure Data Factory","ADLS Gen2","Azure Databricks","Delta","GitHub Actions","dbt"]
+metrics:
+  - "Parametrized ADF Copy → ADLS (dated files)"
+  - "Bronze/Silver/Gold Delta tables"
+  - "Data quality checks (strict/warn)"
+  - "Daily trigger + failure alert rule"
+  - "GitHub Actions import of Databricks notebook"
+  - "Optional dbt mart: fct_taxi_daily"
+repo: ""
+---
+
+## Problem
+Show end‑to‑end Azure orchestration with monitoring and CI/CD in a day.
+
+## Approach
+ADF Copy lands a public taxi CSV into ADLS Gen2 (`taxi/raw`). A Databricks Notebook writes Delta Bronze → Silver and a Gold daily fact table. We added a daily trigger, an alert rule on failed pipeline runs, and a GitHub Action that imports `/Shared/bronze_silver` on push. Secrets use Databricks Secret Scopes for OAuth to ADLS.
+
+## Screenshots
+Embed images from `../images/` (linked services, pipeline canvas, failed & succeeded runs, raw file, DBX counts, GH Actions, alert rule/email, dbt query).
+
+## Impact
+Demonstrates ADF orchestration, secure storage access (OAuth), Delta medallion modeling, CI/CD, and operational readiness (scheduling/alerts). Suitable for production extension (Unity Catalog, job clusters, Purview).
+
