@@ -1,5 +1,5 @@
 {
-  "count": 5,
+  "count": 6,
   "data": [
     {
       "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Databricks/workspaces/dbx-taxi",
@@ -26,6 +26,14 @@
       "type": "microsoft.insights/actiongroups"
     },
     {
+      "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Insights/metricalerts/adf-pipeline-failure-email",
+      "location": "global",
+      "name": "adf-pipeline-failure-email",
+      "resourceGroup": "rg-adf-dbx-demo",
+      "tags": {},
+      "type": "microsoft.insights/metricalerts"
+    },
+    {
       "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.Purview/accounts/pvw-taxi",
       "location": "eastus",
       "name": "pvw-taxi",
@@ -43,5 +51,5 @@
     }
   ],
   "skip_token": null,
-  "total_records": 5
+  "total_records": 6
 }

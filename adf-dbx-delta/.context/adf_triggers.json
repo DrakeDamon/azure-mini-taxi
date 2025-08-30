@@ -1,6 +1,6 @@
 [
   {
-    "etag": "a60013a6-0000-0100-0000-68b076ed0000",
+    "etag": "af001b12-0000-0100-0000-68b0fa430000",
     "id": "/subscriptions/cf96f9c0-5e5e-43d8-8ded-ae5ca7c23380/resourceGroups/rg-adf-dbx-demo/providers/Microsoft.DataFactory/factories/adf-taxi-sono-global/triggers/trigger1",
     "name": "trigger1",
     "properties": {
@@ -33,7 +33,7 @@
         "startTime": "2025-08-27T18:00:00",
         "timeZone": "Eastern Standard Time"
       },
-      "runtimeState": "Stopped",
+      "runtimeState": "Started",
       "type": "ScheduleTrigger"
     },
     "resourceGroup": "rg-adf-dbx-demo",
