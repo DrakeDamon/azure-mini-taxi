@@ -12,9 +12,9 @@ flowchart LR
   B -->|Databricks Notebook| C[(Delta: bronze/taxis)]
   C --> D[(Delta: silver/taxis)]
   D --> E[(Delta: gold/taxi_daily)]
-  A -.-> G[ADF Trigger (daily 06:00)]
-  A -.-> H[Alert rule: Failed pipeline runs → Email]
-  D -.-> I[dbt: fct_taxi_daily (optional)]
+  G[ADF Trigger daily 06:00]
+  H[Alert rule: Failed pipeline runs]
+  I[dbt: fct_taxi_daily optional]
 ```
 
 ## What this proves for the JD
