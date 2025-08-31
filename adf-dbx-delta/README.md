@@ -1,10 +1,11 @@
-# ADF → ADLS → Databricks (Delta) + Schedule + Alerts
+# ADF → ADLS Gen2 → Databricks (Delta) + Schedule + Alerts
 
-End‑to‑end Azure data pipeline: Azure Data Factory ingests a taxi CSV over HTTP into ADLS Gen2; a Databricks notebook writes Delta Bronze → Silver and dbt builds a daily Gold fact. GitHub Actions handles notebook import CI; optional ADF ARM deploy fits in the same pipeline.
+**One-day, end-to-end Azure data pipeline** that lands a public taxi CSV in **ADLS Gen2**, transforms it in **Databricks** to **Delta Bronze/Silver/Gold**, and adds **daily scheduling**, **monitoring/alerts**, and **GitHub Actions** deploys. Secrets are handled with **Databricks Secret Scopes** + **OAuth** (no hard-coding).
+
+## Stack
+Azure Data Factory • ADLS Gen2 • Azure Databricks (Delta) • GitHub Actions • dbt (optional)
 
 ## Architecture
-Diagram source: `design/diagram.mmd`
-
 ```mermaid
 flowchart LR
   A[HTTP taxis.csv] -->|ADF Copy| B[(ADLS Gen2: taxi/raw)]
@@ -12,44 +13,84 @@ flowchart LR
   C --> D[(Delta: silver/taxis)]
   D --> E[(Delta: gold/taxi_daily)]
   A -.-> G[ADF Trigger (daily 06:00)]
-  A -.-> H[Alert rule: Failed pipeline runs -> Email]
-  C -.-> I[dbt: fct_taxi_daily]
+  A -.-> H[Alert rule: Failed pipeline runs → Email]
+  D -.-> I[dbt: fct_taxi_daily (optional)]
 ```
 
-## Medallion
-- Bronze: raw CSV landed to `delta/bronze/taxis`.
-- Silver: typed/cleansed with normalized `payment_type`.
-- Gold: `fct_taxi_daily` aggregated by date and payment.
+## What this proves for the JD
 
-## What This Proves
-- Orchestration: ADF Copy + scheduled trigger + alert rule.
-- Storage/Compute: ADLS Gen2 + Databricks + Delta tables.
-- CI/CD: Action imports `/Shared/bronze_silver` on push; ADF ARM optional.
-- Data Quality: strict/warn toggle; resilient RAW filename handling.
+✅ **ADF orchestration** with parameters → ADLS landing  
+✅ **Databricks notebook** transforms with Delta Bronze/Silver/Gold  
+✅ **Schedule** (daily trigger) and **alert rule** on failed runs  
+✅ **Secure storage access** via OAuth + Secret Scope (no keys in code)  
+✅ **Git versioning & CI**: notebook imported to `/Shared/bronze_silver` on push  
+✅ **(Optional) dbt mart** + tests  
 
-## Runbook (re‑run quickly)
-- ADF: Debug pipeline (parameters below) → succeeds.
-- Databricks: run `/Shared/bronze_silver` end‑to‑end (Bronze/Silver → PASS/WARN).
-- dbt: `cd dbt_taxi && dbt run && dbt test` builds `fct_taxi_daily`.
+## How to run (reproduce quickly)
 
-Parameters (ADF defaults)
-- `source_url`: `https://raw.githubusercontent.com/mwaskom/seaborn-data/master/taxis.csv`
-- `date_str`: `@{formatDateTime(utcnow(),'yyyyMMdd')}`
+### ADF: pipeline `pl_ingest_transform`
 
-## Screenshots (relative paths)
-- images/adf_linked_services.png
-- images/adf_pipeline_canvas.png
-- images/adf_pipeline_failed.png
-- images/adf_pipeline_succeeded.png
-- images/adf_trigger_daily.png
-- images/adls_raw_file.png
-- images/dbx_bronze_silver_gold_counts.png
-- images/gha_deploy_success.png
-- images/alert_email.png
-- images/dbt_fct_taxi_daily_query.png
+**Parameters**
+- `source_url` (default) `https://raw.githubusercontent.com/mwaskom/seaborn-data/master/taxis.csv`
+- `date_str` (default) `@{formatDateTime(utcnow(),'yyyyMMdd')}`
 
-## Resources
-- Data Factory: `adf-taxi-sono-global`
-- Storage: `sttaxistorage` (container: `taxi`, folders: `raw/`, `delta/`)
-- Notebook: `/Shared/bronze_silver`
-- Repo path: `azure-mini-taxi/adf-dbx-delta`
+**Activities**: `CopyHttpToAdls` → `RunBronzeSilver` (`/Shared/bronze_silver`)  
+**Trigger**: daily 06:00
+
+### Databricks cluster Spark config (OAuth to ADLS):
+
+```
+spark.hadoop.fs.azure.account.auth.type.sttaxistorage.dfs.core.windows.net OAuth
+spark.hadoop.fs.azure.account.oauth.provider.type.sttaxistorage.dfs.core.windows.net org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider
+spark.hadoop.fs.azure.account.oauth2.client.id.sttaxistorage.dfs.core.windows.net {{secrets/adls-oauth/app-id}}
+spark.hadoop.fs.azure.account.oauth2.client.secret.sttaxistorage.dfs.core.windows.net {{secrets/adls-oauth/app-secret}}
+spark.hadoop.fs.azure.account.oauth2.client.endpoint.sttaxistorage.dfs.core.windows.net https://login.microsoftonline.com/9eb4939d-921a-44d3-aa4c-2b1512e5743a/oauth2/token
+```
+
+*(Tenant GUID is not secret; id/secret come from the `adls-oauth` secret scope.)*
+
+### Paths
+- **Raw**: `abfss://taxi@sttaxistorage.dfs.core.windows.net/raw/`
+- **Delta base**: `abfss://taxi@sttaxistorage.dfs.core.windows.net/delta/`
+- **Tables**: `bronze/taxis`, `silver/taxis`, `gold/taxi_daily`
+
+**CI/CD**: GitHub Action imports notebook to `/Shared/bronze_silver` on push.
+
+## Data quality & Medallion
+
+- **Silver** casts/cleans + normalizes `payment_type` (Cash/Credit/Other).
+- **DQ toggle**: `STRICT_DQ=True` to fail the notebook (useful to demo alerts) or `False` to warn.
+- **Gold** aggregates daily metrics by `pickup_date` & `payment_type`.
+
+### Results (from latest run)
+- **Bronze**: 6,433 rows
+- **Silver**: 6,382 rows  
+- **Gold**: 89 rows
+
+## Screenshots
+
+Each image below is captured from the live run; filenames live in `adf-dbx-delta/images/`.
+
+### Linked services
+![Linked services](images/adf_linked_services.png)
+
+### Pipeline canvas
+![Pipeline canvas](images/adf_pipeline_canvas.png)
+
+### Monitor – failed (alert demo)
+![Failed pipeline](images/adf_pipeline_failed.png)
+
+### Monitor – succeeded
+![Successful pipeline](images/adf_pipeline_succeeded.png)
+
+### Daily trigger
+![Daily trigger](images/adf_trigger_daily.png)
+
+### ADLS raw landing
+![ADLS raw file](images/adls_raw_file.png)
+
+### Databricks – bronze/silver/gold row counts
+![Databricks counts](images/dbx_bronze_silver_gold_counts.png)
+
+### GitHub Actions – deploy success
+![GitHub Actions deploy](images/gha_deploy_success.png)
