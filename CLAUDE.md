@@ -4,43 +4,74 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Databricks data engineering project implementing a medallion architecture (Bronze → Silver) for NYC taxi data processing. The project uses PySpark and Delta Lake to process CSV taxi data from Azure Data Lake Storage (ADLS).
+End-to-end Azure data pipeline: Azure Data Factory ingests NYC taxi CSV over HTTP into ADLS Gen2; Databricks notebook processes Bronze → Silver medallion layers; dbt builds Gold aggregated fact table. GitHub Actions handles CI/CD for both Databricks notebooks and dbt models.
 
 ## Architecture
 
-- **Raw Layer**: CSV files in ADLS (`abfss://taxi@sttaxistorage.dfs.core.windows.net/raw/`)
+Complete medallion architecture with orchestration:
+- **Raw Layer**: CSV files ingested by ADF into ADLS (`abfss://taxi@sttaxistorage.dfs.core.windows.net/raw/`)
 - **Bronze Layer**: Raw data copied to Delta format (`/delta/bronze/taxis`)  
 - **Silver Layer**: Cleaned and transformed data (`/delta/silver/taxis`)
+- **Gold Layer**: dbt-built aggregated fact table (`fct_taxi_daily`)
 
-The main notebook `bronze_silver.ipynb` contains:
-1. ADLS OAuth configuration using Databricks secrets
-2. Data validation and quality checks
-3. Bronze layer creation (direct copy from raw CSV)
-4. Silver layer transformation with schema changes and data cleaning
-5. Hive metastore table registration
+### Data Flow
+1. **ADF Pipeline**: Daily HTTP ingestion (06:00 UTC) with failure alerts
+2. **Databricks Notebook** (`bronze_silver.ipynb`): Bronze/Silver processing with validation
+3. **dbt Models**: Silver → Gold transformation with data quality tests
 
-## Data Flow
+## Common Commands
 
-**Bronze**: Direct copy of raw CSV data to Delta format
-**Silver**: Schema transformation including:
-- Column renaming (pickup → pickup_ts, dropoff → dropoff_ts, etc.)
-- Type casting (distance, fare, tip, tolls to double)
-- Payment type standardization (cash/credit capitalized, others → "Other")
-- Null value filtering on trip_distance and fare_amount
+### Environment Setup
+```bash
+make env                    # Check required environment variables
+make venv                   # Bootstrap Python 3.11 venv with dbt-databricks
+```
+
+### Context Gathering
+```bash
+make context               # Gather both Azure and Databricks context
+make azure                 # Azure resource inventory and ADF status  
+make dbx                   # Databricks clusters, jobs, workspace state
+```
+
+### dbt Development
+```bash
+make dbt-debug             # Test dbt connection to Databricks
+make dbt-run               # Build dbt models (staging + marts)
+make dbt-test              # Run dbt data quality tests
+make dbt-docs              # Generate dbt documentation
+make dbt-build             # Full build: run + test + docs
+```
+
+### Manual Pipeline Execution
+- **Databricks**: Run `/Shared/bronze_silver` notebook end-to-end
+- **ADF**: Debug pipeline with default parameters in Azure portal
 
 ## Configuration
 
-The project uses Databricks secrets for Azure authentication:
+### Databricks Secrets (OAuth for ADLS)
 - Secret scope: `adls-oauth`
 - Required secrets: `app-id`, `app-secret`, `tenant-id`
-- Storage account: `sttaxistorage`
-- Container: `taxi`
+- Storage account: `sttaxistorage`, container: `taxi`
 
-## Running the Pipeline
+### Environment Variables
+All configuration in `.env` file. Required variables checked by `scripts/check_env.sh`:
+- Azure: `SUBSCRIPTION_ID`, `RESOURCE_GROUP`, `ADF_FACTORY`, `STORAGE_ACCOUNT`
+- Databricks: `DATABRICKS_HOST`, `DATABRICKS_TOKEN`, `ORG_ID`, `CLUSTER_ID`
 
-Execute cells sequentially in `bronze_silver.ipynb`. The validation cell (cell 1) provides comprehensive health checks and will show ✅ PASS or ❌ FAIL with detailed error messages.
+## Data Quality and Validation
 
-Data quality checks validate:
-- trip_distance > 0
-- fare >= 0  
-- payment type in allowed values (cash, credit)
+The validation cell in `bronze_silver.ipynb` provides comprehensive health checks:
+- RAW file existence and readability
+- Bronze/Silver Delta table creation and row counts
+- Data quality checks: trip_distance > 0, fare >= 0, payment_type validation
+- Returns ✅ PASS or ❌ FAIL with detailed error messages
+
+dbt tests validate:
+- Column constraints (not_null on key fields)
+- Accepted values for payment_type: ['Cash','Credit','Other']
+
+## CI/CD Workflows
+
+- **Notebook Deploy** (`.github/workflows/deploy.yml`): Imports `bronze_silver.py` to `/Shared/bronze_silver` on push
+- **dbt Pipeline** (`.github/workflows/dbt.yml`): Runs dbt build on dbt_taxi changes with artifact upload
