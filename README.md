@@ -17,8 +17,6 @@ flowchart LR
   I[dbt: fct_taxi_daily optional]
 ```
 
-## What this proves for the JD
-
 ✅ **ADF orchestration** with parameters → ADLS landing  
 ✅ **Databricks notebook** transforms with Delta Bronze/Silver/Gold  
 ✅ **Schedule** (daily trigger) and **alert rule** on failed runs  
