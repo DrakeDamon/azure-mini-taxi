@@ -70,25 +70,25 @@ spark.hadoop.fs.azure.account.oauth2.client.endpoint.sttaxistorage.dfs.core.wind
 Each image below is captured from the live run; filenames live in `adf-dbx-delta/images/`.
 
 ### Linked services
-![Linked services](images/adf_linked_services.png)
+![Linked services](adf-dbx-delta/images/adf_linked_services.png)
 
 ### Pipeline canvas
-![Pipeline canvas](images/adf_pipeline_canvas.png)
+![Pipeline canvas](adf-dbx-delta/images/adf_pipeline_canvas.png)
 
 ### Monitor – failed (alert demo)
-![Failed pipeline](images/adf_pipeline_failed.png)
+![Failed pipeline](adf-dbx-delta/images/adf_pipeline_failed.png)
 
 ### Monitor – succeeded
-![Successful pipeline](images/adf_pipeline_succeeded.png)
+![Successful pipeline](adf-dbx-delta/images/adf_pipeline_succeeded.png)
 
 ### Daily trigger
-![Daily trigger](images/adf_trigger_daily.png)
+![Daily trigger](adf-dbx-delta/images/adf_trigger_daily.png)
 
 ### ADLS raw landing
-![ADLS raw file](images/adls_raw_file.png)
+![ADLS raw file](adf-dbx-delta/images/adls_raw_file.png)
 
 ### Databricks – bronze/silver/gold row counts
-![Databricks counts](images/dbx_bronze_silver_gold_counts.png)
+![Databricks counts](adf-dbx-delta/images/dbx_bronze_silver_gold_counts.png)
 
 ### GitHub Actions – deploy success
-![GitHub Actions deploy](images/gha_deploy_success.png)
+![GitHub Actions deploy](adf-dbx-delta/images/gha_deploy_success.png)
