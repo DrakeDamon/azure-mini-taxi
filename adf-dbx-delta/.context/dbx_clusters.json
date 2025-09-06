@@ -104,14 +104,165 @@
       "init_scripts_safe_mode": false
     },
     {
+      "cluster_id": "0828-232838-xlfzvxya",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "driver_healthy": false,
+      "cluster_name": "job-533466064274966-run-879380140724025",
+      "spark_version": "16.4.x-scala2.12",
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "autotermination_minutes": 0,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "JOB",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "effective_spark_version": "16.4.x-scala2.12",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "Finding instances for new nodes, acquiring more instances if necessary",
+      "start_time": 1756423718972,
+      "terminated_time": 1756423801793,
+      "last_state_loss_time": 0,
+      "last_activity_time": 0,
+      "last_restarted_time": 1756423718972,
+      "num_workers": 1,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "job-533466064274966-run-879380140724025",
+        "ClusterId": "0828-232838-xlfzvxya",
+        "JobId": "533466064274966",
+        "RunName": "ADF_adf-taxi-sono-global_pl_ingest_transform_RunBronzeSilver_3b6c3239-04d7-4463-a053-54fbbdfee713"
+      },
+      "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+      },
+      "init_scripts_safe_mode": false
+    },
+    {
+      "cluster_id": "0829-001341-xtpoptb6",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "spark_context_id": 2938742272990869257,
+      "driver_healthy": true,
+      "cluster_name": "job-541795694371107-run-16711837548561",
+      "spark_version": "16.4.x-scala2.12",
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "autotermination_minutes": 0,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "JOB",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "effective_spark_version": "16.4.x-scala2.12",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "",
+      "start_time": 1756426421677,
+      "terminated_time": 1756426930974,
+      "last_state_loss_time": 0,
+      "last_activity_time": 1756426843457,
+      "last_restarted_time": 1756426820418,
+      "num_workers": 1,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "job-541795694371107-run-16711837548561",
+        "ClusterId": "0829-001341-xtpoptb6",
+        "JobId": "541795694371107",
+        "RunName": "ADF_adf-taxi-sono-global_pl_ingest_transform_RunBronzeSilver_7775ecca-f264-4b17-92cf-cc6e0e64e500"
+      },
+      "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+      },
+      "init_scripts_safe_mode": false
+    },
+    {
+      "cluster_id": "0828-232952-il0ivag2",
+      "creator_user_name": "sportsgroup3d@gmail.com",
+      "spark_context_id": 2185399496623832989,
+      "driver_healthy": true,
+      "cluster_name": "job-730043208002861-run-84918141929001",
+      "spark_version": "16.4.x-scala2.12",
+      "azure_attributes": {
+        "first_on_demand": 1,
+        "availability": "ON_DEMAND_AZURE",
+        "spot_bid_max_price": -1.0
+      },
+      "node_type_id": "Standard_D2ds_v6",
+      "driver_node_type_id": "Standard_D2ds_v6",
+      "autotermination_minutes": 0,
+      "enable_elastic_disk": true,
+      "disk_spec": {},
+      "cluster_source": "JOB",
+      "enable_local_disk_encryption": false,
+      "instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "driver_instance_source": {
+        "node_type_id": "Standard_D2ds_v6"
+      },
+      "effective_spark_version": "16.4.x-scala2.12",
+      "release_version": "16.4.7",
+      "state": "TERMINATED",
+      "state_message": "",
+      "start_time": 1756423792730,
+      "terminated_time": 1756424321503,
+      "last_state_loss_time": 0,
+      "last_activity_time": 1756424227352,
+      "last_restarted_time": 1756424222200,
+      "num_workers": 1,
+      "default_tags": {
+        "Vendor": "Databricks",
+        "Creator": "sportsgroup3d@gmail.com",
+        "ClusterName": "job-730043208002861-run-84918141929001",
+        "ClusterId": "0828-232952-il0ivag2",
+        "JobId": "730043208002861",
+        "RunName": "ADF_adf-taxi-sono-global_pl_ingest_transform_RunBronzeSilver_c480d3b5-512b-4e3e-b7b8-b88e5a2ae3e9"
+      },
+      "termination_reason": {
+        "code": "JOB_FINISHED",
+        "type": "SUCCESS"
+      },
+      "init_scripts_safe_mode": false
+    },
+    {
       "cluster_id": "0826-235901-rqv5jag2",
       "creator_user_name": "sportsgroup3d@gmail.com",
-      "spark_context_id": 6680257405667450121,
+      "spark_context_id": 723303463317232298,
       "driver_healthy": true,
       "cluster_name": "single-small",
       "spark_version": "16.4.x-scala2.12",
       "spark_conf": {
+        "spark.hadoop.fs.azure.account.auth.type.sttaxistorage.dfs.core.windows.net": "OAuth",
+        "spark.hadoop.fs.azure.account.oauth.provider.type.sttaxistorage.dfs.core.windows.net": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
         "spark.master": "local[*, 4]",
+        "spark.hadoop.fs.azure.account.oauth2.client.id.sttaxistorage.dfs.core.windows.net": "{{secrets/adls-oauth/app-id}}",
+        "spark.hadoop.fs.azure.account.oauth2.client.secret.sttaxistorage.dfs.core.windows.net": "{{secrets/adls-oauth/app-secret}}",
+        "spark.hadoop.fs.azure.account.oauth2.client.endpoint.sttaxistorage.dfs.core.windows.net": "https://login.microsoftonline.com/9eb4939d-921a-44d3-aa4c-2b1512e5743a/oauth2/token",
         "spark.databricks.cluster.profile": "singleNode"
       },
       "azure_attributes": {
@@ -143,14 +294,14 @@
       "use_ml_runtime": true,
       "is_single_node": true,
       "assigned_principal": "user:sportsgroup3d@gmail.com",
-      "release_version": "16.4.7",
+      "release_version": "16.4.8",
       "state": "TERMINATED",
       "state_message": "Inactive cluster terminated (inactive for 30 minutes).",
       "start_time": 1756252741347,
-      "terminated_time": 1756393012647,
-      "last_state_loss_time": 1756390912705,
-      "last_activity_time": 1756390919254,
-      "last_restarted_time": 1756390912782,
+      "terminated_time": 1757111954890,
+      "last_state_loss_time": 1757109984534,
+      "last_activity_time": 1757110031701,
+      "last_restarted_time": 1757109984596,
       "num_workers": 0,
       "default_tags": {
         "Vendor": "Databricks",

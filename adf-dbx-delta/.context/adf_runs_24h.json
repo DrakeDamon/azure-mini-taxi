@@ -1,4 +1,35 @@
 {
   "continuationToken": null,
-  "value": []
+  "value": [
+    {
+      "annotations": [],
+      "debugRunId": null,
+      "durationInMs": 540352,
+      "id": "/SUBSCRIPTIONS/CF96F9C0-5E5E-43D8-8DED-AE5CA7C23380/RESOURCEGROUPS/RG-ADF-DBX-DEMO/PROVIDERS/MICROSOFT.DATAFACTORY/FACTORIES/ADF-TAXI-SONO-GLOBAL/pipelineruns/ac4cb2ca-00e7-4bc8-903f-568e4f175219",
+      "invokedBy": {
+        "id": "08584444972853566581089047947CU63",
+        "invokedByType": "ScheduleTrigger",
+        "name": "trigger1",
+        "pipelineName": null,
+        "pipelineRunId": null
+      },
+      "isLatest": true,
+      "lastUpdated": "2025-09-05T22:09:01.221794+00:00",
+      "message": "",
+      "parameters": {
+        "date_str": "@{formatDateTime(utcnow(),'yyyyMMdd')}",
+        "source_url": "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/taxis.csv"
+      },
+      "pipelineName": "pl_ingest_transform",
+      "pipelineReturnValue": {},
+      "resourceGroup": "RG-ADF-DBX-DEMO",
+      "runDimension": {},
+      "runDimensions": null,
+      "runEnd": "2025-09-05T22:09:01.221126+00:00",
+      "runGroupId": "ac4cb2ca-00e7-4bc8-903f-568e4f175219",
+      "runId": "ac4cb2ca-00e7-4bc8-903f-568e4f175219",
+      "runStart": "2025-09-05T22:00:00.868276+00:00",
+      "status": "Succeeded"
+    }
+  ]
 }
