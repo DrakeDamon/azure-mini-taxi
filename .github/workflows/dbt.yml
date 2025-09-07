@@ -28,6 +28,21 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install --upgrade dbt-core dbt-databricks
 
+      - name: Create profiles.yml for CI
+        run: |
+          cat << EOF > profiles.yml
+          databricks:
+            target: dev
+            outputs:
+              dev:
+                type: databricks
+                host: ${{ env.DATABRICKS_HOST }}
+                http_path: /sql/protocolv1/o/930731835834472/0826-235901-rqv5jag2
+                catalog: hive_metastore
+                schema: default
+                token: ${{ env.DATABRICKS_TOKEN }}
+          EOF
+
       - name: dbt debug
         run: dbt debug --profiles-dir .
 
