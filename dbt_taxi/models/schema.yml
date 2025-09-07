@@ -3,24 +3,74 @@ version: 2
 
 models:
   - name: silver_taxis
+    description: "Staging layer for taxi trip data with proper unique identifiers and data quality checks"
     columns:
-      - name: pickup_ts
-        tests: [not_null]
-      - name: trip_distance
-        tests: [not_null]
-      - name: fare_amount
-        tests: [not_null]
-      - name: payment_type
+      - name: trip_id
+        description: "Unique row-based identifier for each trip"
         tests:
-          - accepted_values:
-              values: ['Cash','Credit','Other']
-
-  - name: fct_taxi_daily
-    columns:
-      - name: pickup_date
+          - unique
+          - not_null
+      - name: pickup_ts
+        description: "Pickup timestamp converted to proper timestamp type"
         tests: [not_null]
+      - name: dropoff_ts
+        description: "Dropoff timestamp converted to proper timestamp type"
+      - name: trip_distance
+        description: "Trip distance in miles (validated > 0)"
+        tests:
+          - not_null
+      - name: fare_amount
+        description: "Base fare amount (validated >= 0)"
+        tests:
+          - not_null
+      - name: tip_amount
+        description: "Tip amount (null values converted to 0)"
+        tests:
+          - not_null
+      - name: tolls_amount
+        description: "Tolls amount (null values converted to 0)"
+        tests:
+          - not_null
       - name: payment_type
+        description: "Standardized payment method"
         tests:
           - not_null
           - accepted_values:
-              values: ['Cash','Credit','Other']
+              values: ["Cash", "Credit", "Other"]
+      - name: total_amount
+        description: "Total trip cost (fare + tip + tolls)"
+        tests:
+          - not_null
+      - name: pickup_date
+        description: "Date extracted from pickup timestamp for partitioning"
+        tests:
+          - not_null
+
+  - name: fct_taxi_daily
+    description: "Daily aggregated taxi trip metrics"
+    tests:
+      - unique:
+          column_name: "pickup_date || '|' || payment_type"
+    columns:
+      - name: pickup_date
+        description: "Date of taxi trips"
+        tests:
+          - not_null
+      - name: payment_type
+        description: "Payment method for aggregated trips"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Cash", "Credit", "Other"]
+      - name: trips
+        description: "Total number of trips"
+        tests:
+          - not_null
+      - name: total_distance
+        description: "Sum of all trip distances"
+        tests:
+          - not_null
+      - name: total_fare
+        description: "Sum of all fare amounts"
+        tests:
+          - not_null

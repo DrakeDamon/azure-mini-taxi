@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: default
+    description: "Silver layer tables from Databricks processing"  
+    database: hive_metastore
+    schema: default
+    tables:
+      - name: silver_taxis
+        description: "Cleaned and transformed taxi trip data"
+        columns:
+          - name: pickup_ts
+            description: "Pickup timestamp as string"
+          - name: dropoff_ts
+            description: "Dropoff timestamp as string"
+          - name: trip_distance
+            description: "Trip distance in miles"
+          - name: fare_amount
+            description: "Base fare amount"
+          - name: tip_amount
+            description: "Tip amount"
+          - name: tolls_amount
+            description: "Tolls amount"
+          - name: payment_type
+            description: "Payment method (Cash, Credit, Other)"
